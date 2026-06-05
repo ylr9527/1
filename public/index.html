@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agnes Image 2.1 Flash 生成器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Agnes Image Studio</p>
+          <h1>文生图 / 图生图</h1>
+          <p class="hero-copy">
+            使用 <strong>agnes-image-2.1-flash</strong> 调用 Agnes AI 图片生成接口，支持提示词、尺寸、Seed 和多张参考图 URL。
+          </p>
+        </div>
+        <div class="model-card">
+          <span>当前模型</span>
+          <strong id="modelName">agnes-image-2.1-flash</strong>
+          <small id="keyStatus">正在检测 API Key 配置…</small>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <form id="imageForm" class="panel controls">
+          <div class="field">
+            <label>生成模式</label>
+            <div class="mode-tabs" role="tablist" aria-label="生成模式">
+              <label>
+                <input type="radio" name="mode" value="text-to-image" checked />
+                <span>文生图</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="image-to-image" />
+                <span>图生图</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field api-key-field" id="apiKeyField">
+            <label for="apiKey">API Key（可选）</label>
+            <input id="apiKey" name="apiKey" type="password" placeholder="如果服务器未配置 AGNES_API_KEY，可在这里临时输入" autocomplete="off" />
+            <p>建议在服务器用环境变量 <code>AGNES_API_KEY</code> 配置，避免把 Key 暴露在浏览器里。</p>
+          </div>
+
+          <div class="field">
+            <label for="prompt">提示词</label>
+            <textarea id="prompt" name="prompt" rows="6" required placeholder="例如：A futuristic city skyline at sunset, cinematic lighting, ultra detailed"></textarea>
+          </div>
+
+          <div class="grid two">
+            <div class="field">
+              <label for="size">图片尺寸</label>
+              <select id="size" name="size">
+                <option value="1024x1024">1024 × 1024</option>
+                <option value="1024x768">1024 × 768</option>
+                <option value="768x1024">768 × 1024</option>
+                <option value="1152x768">1152 × 768</option>
+                <option value="768x1152">768 × 1152</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="seed">Seed（可选）</label>
+              <input id="seed" name="seed" type="number" placeholder="例如：42" />
+            </div>
+          </div>
+
+          <div id="imageUrlSection" class="field hidden">
+            <label for="imageUrls">参考图片 URL（每行一个）</label>
+            <textarea id="imageUrls" name="imageUrls" rows="4" placeholder="https://example.com/image1.png&#10;https://example.com/image2.png"></textarea>
+            <p>Agnes 文档的图生图参数使用 <code>extra_body.image</code> 传入图片 URL 数组。</p>
+          </div>
+
+          <button id="submitButton" type="submit">开始生成</button>
+        </form>
+
+        <section class="panel result-panel">
+          <div class="result-header">
+            <div>
+              <p class="eyebrow">Result</p>
+              <h2>生成结果</h2>
+            </div>
+            <button id="copyJson" class="secondary" type="button" disabled>复制 JSON</button>
+          </div>
+
+          <div id="status" class="status idle">填写参数后点击开始生成。</div>
+          <div id="gallery" class="gallery"></div>
+          <details class="raw-box">
+            <summary>查看原始响应</summary>
+            <pre id="rawJson">{}</pre>
+          </details>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

@@ -3,28 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agnes Image 2.1 Flash 生成器</title>
+    <title>Agnes Image / Video 生成器</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="shell">
       <section class="hero">
         <div>
-          <p class="eyebrow">Agnes Image Studio</p>
-          <h1>文生图 / 图生图</h1>
+          <p class="eyebrow">Agnes Studio</p>
+          <h1>图片 / 视频生成</h1>
           <p class="hero-copy">
-            使用 <strong>agnes-image-2.1-flash</strong> 调用 Agnes AI 图片生成接口，支持提示词、尺寸、Seed 和多张参考图 URL。
+            使用 <strong>agnes-image-2.1-flash</strong> 与 <strong>agnes-video-v2.0</strong>，支持文生图、图生图、文生视频、图生视频和多图视频生成。
           </p>
         </div>
         <div class="model-card">
           <span>当前模型</span>
-          <strong id="modelName">agnes-image-2.1-flash</strong>
+          <strong id="modelName">agnes-image-2.1-flash / agnes-video-v2.0</strong>
           <small id="keyStatus">正在检测 API Key 配置…</small>
         </div>
       </section>
 
       <section class="workspace">
-        <form id="imageForm" class="panel controls">
+        <form id="generationForm" class="panel controls">
           <div class="field">
             <label>生成模式</label>
             <div class="mode-tabs" role="tablist" aria-label="生成模式">
@@ -35,6 +35,18 @@
               <label>
                 <input type="radio" name="mode" value="image-to-image" />
                 <span>图生图</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="text-to-video" />
+                <span>文生视频</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="image-to-video" />
+                <span>图生视频</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="multi-image-video" />
+                <span>多图视频</span>
               </label>
             </div>
           </div>
@@ -50,7 +62,7 @@
             <textarea id="prompt" name="prompt" rows="6" required placeholder="例如：A futuristic city skyline at sunset, cinematic lighting, ultra detailed"></textarea>
           </div>
 
-          <div class="grid two">
+          <div id="imageOptions" class="grid two">
             <div class="field">
               <label for="size">图片尺寸</label>
               <select id="size" name="size">
@@ -67,10 +79,36 @@
             </div>
           </div>
 
+          <div id="videoOptions" class="hidden">
+            <div class="grid two">
+              <div class="field">
+                <label for="width">视频宽度</label>
+                <input id="width" name="width" type="number" min="1" value="1152" />
+              </div>
+              <div class="field">
+                <label for="height">视频高度</label>
+                <input id="height" name="height" type="number" min="1" value="768" />
+              </div>
+              <div class="field">
+                <label for="numFrames">总帧数</label>
+                <input id="numFrames" name="numFrames" type="number" min="1" max="441" value="121" />
+                <p>Agnes 文档示例使用 121 帧，约 5 秒 @ 24fps。</p>
+              </div>
+              <div class="field">
+                <label for="frameRate">帧率</label>
+                <input id="frameRate" name="frameRate" type="number" min="1" max="60" value="24" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="videoSeed">视频 Seed（可选）</label>
+              <input id="videoSeed" name="videoSeed" type="number" placeholder="例如：42" />
+            </div>
+          </div>
+
           <div id="imageUrlSection" class="field hidden">
             <label for="imageUrls">参考图片 URL（每行一个）</label>
             <textarea id="imageUrls" name="imageUrls" rows="4" placeholder="https://example.com/image1.png&#10;https://example.com/image2.png"></textarea>
-            <p>Agnes 文档的图生图参数使用 <code>extra_body.image</code> 传入图片 URL 数组。</p>
+            <p id="imageUrlHint">图生模式使用参考图片 URL；多图视频至少填写 2 个 URL。</p>
           </div>
 
           <button id="submitButton" type="submit">开始生成</button>

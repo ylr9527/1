@@ -158,7 +158,7 @@ textarea:focus {
 
 .mode-tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
 }
 
@@ -266,14 +266,16 @@ button.secondary {
   margin: 18px 0;
 }
 
-.image-card {
+.image-card,
+.video-card {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   background: rgba(4, 8, 18, 0.72);
 }
 
-.image-card img {
+.image-card img,
+.video-card video {
   display: block;
   width: 100%;
   aspect-ratio: 1;
@@ -281,7 +283,16 @@ button.secondary {
   background: #111827;
 }
 
-.image-card a {
+.video-card {
+  grid-column: 1 / -1;
+}
+
+.video-card video {
+  aspect-ratio: 16 / 9;
+}
+
+.image-card a,
+.video-card a {
   display: block;
   padding: 12px;
   color: #86f7d4;

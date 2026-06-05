@@ -1,10 +1,13 @@
-# Agnes Image Studio
+# Agnes Studio
 
-一个基于 Agnes AI 图片生成接口的本地页面，支持：
+一个基于 Agnes AI 图片与视频生成接口的本地页面，支持：
 
 - 文生图：直接使用提示词调用 `agnes-image-2.1-flash`
 - 图生图：传入参考图片 URL，并使用 `tags: ["img2img"]` 与 `extra_body.image`
-- 尺寸和 Seed 参数
+- 文生视频：使用 `agnes-video-v2.0` 创建异步视频任务，并自动轮询任务结果
+- 图生视频：使用 `image` 参数传入首张参考图片 URL
+- 多图视频：使用 `extra_body.image` 传入多张参考图片 URL
+- 图片尺寸、视频宽高/帧数/帧率和 Seed 参数
 - 服务端环境变量保存 API Key，避免把真实 Key 写进前端代码
 
 ## 安装
@@ -38,3 +41,7 @@ AGNES_API_KEY=你的_Agnes_API_Key npm start
 打开：<http://localhost:3000>
 
 如果服务器没有设置 `AGNES_API_KEY`，也可以在页面表单中临时输入 Key；但生产环境更建议使用服务端环境变量。
+
+## 视频生成说明
+
+Agnes 视频接口是异步任务流程：页面先调用 `POST /api/generate-video` 创建任务，再通过 `GET /api/video-result?taskId=...` 每 5 秒轮询结果。完成后页面会兼容读取 `video_url`、`remixed_from_video_id` 或 `url` 字段并渲染视频播放器。

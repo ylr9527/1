@@ -4,7 +4,7 @@
 
 - 文生图：直接使用提示词调用 `agnes-image-2.1-flash`
 - 图生图：传入参考图片 URL，并使用 `tags: ["img2img"]` 与 `extra_body.image`
-- 尺寸和 Seed 参数
+- 预设尺寸、自定义尺寸和 Seed 参数
 - 服务端环境变量保存 API Key，避免把真实 Key 写进前端代码
 
 ## 安装

@@ -10,6 +10,25 @@ const PUBLIC_DIR = path.join(__dirname, 'public');
 const AGNES_API_URL = 'https://apihub.agnes-ai.com/v1/images/generations';
 const AGNES_IMAGE_MODEL = 'agnes-image-2.1-flash';
 
+
+const isValidImageSize = (size) => {
+  if (typeof size !== 'string') return false;
+
+  const match = size.match(/^(\d{2,4})x(\d{2,4})$/);
+  if (!match) return false;
+
+  const [, rawWidth, rawHeight] = match;
+  const width = Number(rawWidth);
+  const height = Number(rawHeight);
+
+  return Number.isInteger(width)
+    && Number.isInteger(height)
+    && width >= 64
+    && height >= 64
+    && width <= 4096
+    && height <= 4096;
+};
+
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -61,6 +80,10 @@ const handleGenerateImage = async (request, response) => {
 
   if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
     return sendJson(response, 400, { error: '请输入图片提示词。' });
+  }
+
+  if (!isValidImageSize(size)) {
+    return sendJson(response, 400, { error: '图片尺寸必须是 64 到 4096 之间的 宽度x高度 格式，例如 1280x720。' });
   }
 
   const requestBody = {

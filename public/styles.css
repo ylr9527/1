@@ -194,6 +194,10 @@ textarea:focus {
   gap: 14px;
 }
 
+.grid.compact {
+  gap: 10px;
+}
+
 .hidden {
   display: none;
 }

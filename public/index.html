@@ -59,12 +59,22 @@
                 <option value="768x1024">768 × 1024</option>
                 <option value="1152x768">1152 × 768</option>
                 <option value="768x1152">768 × 1152</option>
+                <option value="custom">自定义尺寸</option>
               </select>
             </div>
             <div class="field">
               <label for="seed">Seed（可选）</label>
               <input id="seed" name="seed" type="number" placeholder="例如：42" />
             </div>
+          </div>
+
+          <div id="customSizeSection" class="field hidden">
+            <label>自定义图片尺寸</label>
+            <div class="grid two compact">
+              <input id="customWidth" name="customWidth" type="number" min="64" max="4096" step="1" inputmode="numeric" placeholder="宽度，例如 1280" />
+              <input id="customHeight" name="customHeight" type="number" min="64" max="4096" step="1" inputmode="numeric" placeholder="高度，例如 720" />
+            </div>
+            <p>选择“自定义尺寸”后请输入宽度和高度，提交时会组合为 <code>宽度x高度</code>。</p>
           </div>
 
           <div id="imageUrlSection" class="field hidden">

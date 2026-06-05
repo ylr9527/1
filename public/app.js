@@ -1,6 +1,7 @@
 const form = document.querySelector('#imageForm');
 const modeInputs = [...document.querySelectorAll('input[name="mode"]')];
 const imageUrlSection = document.querySelector('#imageUrlSection');
+const customSizeSection = document.querySelector('#customSizeSection');
 const submitButton = document.querySelector('#submitButton');
 const statusBox = document.querySelector('#status');
 const gallery = document.querySelector('#gallery');
@@ -16,6 +17,23 @@ const setStatus = (message, state = 'idle') => {
 };
 
 const selectedMode = () => form.elements.mode.value;
+
+const isCustomSize = () => form.elements.size.value === 'custom';
+
+const syncSizeControls = () => {
+  const custom = isCustomSize();
+  customSizeSection.classList.toggle('hidden', !custom);
+  form.elements.customWidth.required = custom;
+  form.elements.customHeight.required = custom;
+};
+
+const resolveSize = () => {
+  if (!isCustomSize()) return form.elements.size.value;
+
+  const width = form.elements.customWidth.value.trim();
+  const height = form.elements.customHeight.value.trim();
+  return `${width}x${height}`;
+};
 
 const syncMode = () => {
   imageUrlSection.classList.toggle('hidden', selectedMode() !== 'image-to-image');
@@ -70,6 +88,7 @@ const loadConfig = async () => {
 };
 
 modeInputs.forEach((input) => input.addEventListener('change', syncMode));
+form.elements.size.addEventListener('change', syncSizeControls);
 copyJsonButton.addEventListener('click', async () => {
   await navigator.clipboard.writeText(JSON.stringify(latestPayload, null, 2));
   copyJsonButton.textContent = '已复制';
@@ -90,7 +109,7 @@ form.addEventListener('submit', async (event) => {
     mode: selectedMode(),
     apiKey: form.elements.apiKey.value.trim(),
     prompt: form.elements.prompt.value,
-    size: form.elements.size.value,
+    size: resolveSize(),
     seed: form.elements.seed.value,
     imageUrls: collectImageUrls(),
   };
@@ -120,4 +139,5 @@ form.addEventListener('submit', async (event) => {
 });
 
 syncMode();
+syncSizeControls();
 loadConfig();
